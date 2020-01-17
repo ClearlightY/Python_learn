@@ -36,6 +36,10 @@ print(L[:])
 print((0, 1, 2, 3, 4, 5)[:3])
 print('abcdefg'[:3])
 print('abcdefg'[::2])
+# 翻转字符串
+print('abcdefg'[::-1])
+# 复制字符串
+print('abcdefg'[::1])
 print(L[1:])
 
 
