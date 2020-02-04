@@ -40,7 +40,22 @@ line = 'Cats are smarter than dogs?'
 searchObj = re.search(r'(.*) are (.*?) .*', line, re.M | re.I)
 if searchObj:
     print('searchObj.group():', searchObj.group())
-    print('searchObj.group(1):', searchObj.group(1))  
+    print('searchObj.group(1):', searchObj.group(1))
     print('searchObj.group(2):', searchObj.group(2))
 else:
     print('Nothing found!!')
+
+# compile函数
+# 用于编译正则表达式，生成一个正则表达式（ Pattern ）对象，供 match() 和 search() 这两个函数使用。
+
+# 用于匹配至少一个数字
+pattern = re.compile(r'\d+')
+m = pattern.match('one12twothree34four', 3, 10)
+n = pattern.match('one12twothree34four', 2, 10)
+print(m)
+print(n)
+
+print(m.group(0))
+print(m.start(0))
+print(m.end(0))
+print(m.span(0))

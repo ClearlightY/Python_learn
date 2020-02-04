@@ -59,6 +59,7 @@ print(re.search(r'^I', string, flags=re.M))
 print(re.search(r'ab*', 'a'))
 print(re.search(r'ab*', 'abbbbbb'))
 
+print("sign******")
 # +: 出现1或多次, 至少一个字符
 print(re.search(r'ab+', 'a'))
 print(re.search(r'ab+', 'abbbbbb'))
