@@ -30,7 +30,7 @@ print(type(soup.a.parent.parent.name))
 # Attributes
 # 获取属性信息
 tag = soup.a
-print(tag.attrs)
+print("属性", tag.attrs)
 # 获取class属性的值
 print(tag.attrs['class'])
 print(tag.attrs['href'])
