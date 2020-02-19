@@ -54,3 +54,18 @@ print(m.span())
 
 match = re.search(r'PY.*N', 'PYKSJDFNN')
 print(match.group(0))
+
+split = re.compile('[ \t\u3000]*-+$')
+s = split.match('  \t-a')
+print(s)
+
+word_pattern = re.compile(r'\w+$')
+print(word_pattern.findall('This is a something'))
+
+phone_num = re.compile(r'\w{5}\s')
+
+word_pattern2 = re.compile(r'\b\w{5}\b')
+print(word_pattern.findall('These are some phone numbers 915-555-1234...hello'))
+print(word_pattern2.findall('These are some phone numbers 915-555-1234...hello'))
+
+num = re.compile(r'\(?\d{3}[-.)]\d{3}[-.]\d{4}')
