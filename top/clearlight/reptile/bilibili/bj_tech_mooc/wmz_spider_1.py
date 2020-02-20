@@ -3,6 +3,7 @@ import re
 from bs4 import BeautifulSoup
 import traceback
 import json
+import sys
 
 
 def get_html_text(url):
@@ -99,11 +100,14 @@ def get_article_url(lst, web_url, path):
 def get_news_content(lst, web_url, fpath, fcontent):
     info_dict = {'url': '', 'title': '', 'content': '', 'class': '', 'tag': []}
     fw = open(fcontent, 'a', encoding='utf-8')
+    count = 0
     with open(fpath, 'r') as fr:
         for i, line in enumerate(fr):
             # print(i)
             url = re.search(r'http.+\.html', line).group(0)
             print(url)
+            count += 1
+            print(count)
             try:
                 r = get_html_text(url)
                 # 将url存入dict
@@ -148,66 +152,77 @@ def get_news_content(lst, web_url, fpath, fcontent):
                             break
                         soup = BeautifulSoup(wu_text, 'html.parser')
                     article_content = soup.find('section', attrs={'id': 'article'})
-                    art_p = article_content.find_all('p')
-                    print(len(art_p))
-                    if len(art_p) < 2:
-                        for ac in article_content:
-                            name = str(ac.name)
-                            if name == 'br':
-                                content += '\n'
-                            if str(ac.string) == 'None' or str(ac.string) == 'wm("arc");':
-                                continue
-                            # print(ac.string)
-                            content += str(ac.string)
-                            # print(content)
-                    else:
-                        article1 = soup.find('article', attrs={'id': 'con_l'})
-                        art = article1.find_all('p')
-                        # print(art)
-                        # content = ''
-                        for j, a in enumerate(art):
-                            # if a.attrs['class'] == 'page_css':
-                            #     continue
-                            # print(art[j])
-                            # print(type(art[j]))
-                            # if art[j].find('class', attrs={'class': 'page_css'}):
-                            #     print(1)
-                            # continue
-                            m = art[j].find('a')
-                            if art[j].find('a'):
-                                if str(art[j].find('a').string) == '上一页':
-                                    continue
-                            # print(a.contents)
-                            for m in a.contents:
-                                content += str(m.string)
-                                # print(m)
-                            # print(content)
+                    # art_p = article_content.find_all('p')
+                    # print(article_content.contents)
+                    # print(article_content)
+                    # for ac in article_content.contents:
+                    for num, desc in enumerate(article_content.descendants):
+                        # match = re.match(r'{pe.begin.pagination}.*{pe.end.pagination}', str(article_content.descendants))
+                        # print(match)
+                        dc = str(desc)
+                        if str(desc.name) == 'a' or str(desc.name) == 'script' or dc == 'wm("arc");':
+                            continue
+                        # print(desc)
+                        # if re.match(r'\s', dc):
+                        #     continue
+                        if str(desc.name) == 'p' or str(desc.name) == 'br':
                             content += '\n'
-                    # print(content)
+                            continue
+                        if re.match(r'[{p.*}上一页下一页<b>.*</b>]', dc):
+                            continue
+                        if dc == '1' or dc == '2' or dc == '3':
+                            continue
+                        if dc == ' ':
+                            continue
+                        # if re.match(r'\s*', dc):
+                        #     continue
+                        content += dc
+                        # print(type(desc))
+
+                        # print(type(article_content.descendants))
+                        # print(article_content.descendants)
+                        # print(article_content)
+
                     # 文章内容存入dict
+                # print(content)
                 info_dict['content'] = content
                 fw.write(json.dumps(info_dict, ensure_ascii=False) + '\n')
             except:
                 traceback.print_exc()
-            if i == 100:
-                break
+            # if i == 200:
+            #     break
         # print(info_dict)
     fr.close()
     fw.close()
+
+
+'''class Logger(object):
+    def __init__(self, fileN="Default.log"):
+        self.terminal = sys.stdout
+        self.log = open(fileN, "a")
+
+    def write(self, message):
+        self.terminal.write(message)
+        self.log.write(message)
+
+    def flush(self):
+        pass'''
 
 
 def main():
     web_url = 'http://www.cnwmz.com'
     lst = []
     fpath = 'F://wmz/wmz.json'
-    flist_url = 'F://wmz/article_url1.txt'
-    fcontent = "F://wmz/article_info.txt"
+    flist_url = 'F://wmz/500025000_60000120000.txt'
+    fname = re.search(r'\d+_\d+', flist_url)
+    fcontent = "F://wmz/article_info_" + str(fname.group(0)) + ".txt"
     # 获取文秘站所有导航的页码链接
     # get_nav_addr(lst, web_url)
     # 获取文秘站的所有文章链接
     # get_article_url(lst, web_url, flist_url)
     # 获取想要的内容
     get_news_content(lst, web_url, flist_url, fcontent)
+    # sys.stout = Logger("F://wmz/log.txt")
 
 
 if __name__ == '__main__':

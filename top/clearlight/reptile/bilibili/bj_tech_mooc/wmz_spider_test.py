@@ -138,7 +138,8 @@ def get_news_content(lst, web_url, fpath, fcontent):
                 # 文章有可能有多页, 因此需要爬取多个页面的内容
                 web_url = re.search(r'http://www.cnwmz.com/html/\d+/\d+', line)
                 content = ''
-                for j in range(20):
+                con = ['']
+                for j in range(30):
                     # 尝试文章是否有多页, 若有多页的话, 则改变j的值进行内容添加
                     if j != 0:
                         j += 1
@@ -150,6 +151,7 @@ def get_news_content(lst, web_url, fpath, fcontent):
                     article_content = soup.find('section', attrs={'id': 'article'})
                     art_p = article_content.find_all('p')
                     print(len(art_p))
+
                     if len(art_p) < 2:
                         for ac in article_content:
                             name = str(ac.name)
@@ -160,11 +162,11 @@ def get_news_content(lst, web_url, fpath, fcontent):
                             # print(ac.string)
                             content += str(ac.string)
                             # print(content)
+                        # con[0] = content
                     else:
                         article1 = soup.find('article', attrs={'id': 'con_l'})
                         art = article1.find_all('p')
                         # print(art)
-                        # content = ''
                         for j, a in enumerate(art):
                             # if a.attrs['class'] == 'page_css':
                             #     continue
@@ -183,13 +185,14 @@ def get_news_content(lst, web_url, fpath, fcontent):
                                 # print(m)
                             # print(content)
                             content += '\n'
+                        # con[0] = content
                     # print(content)
                     # 文章内容存入dict
                 info_dict['content'] = content
                 fw.write(json.dumps(info_dict, ensure_ascii=False) + '\n')
             except:
                 traceback.print_exc()
-            if i == 100:
+            if i == 0:
                 break
         # print(info_dict)
     fr.close()
@@ -200,8 +203,8 @@ def main():
     web_url = 'http://www.cnwmz.com'
     lst = []
     fpath = 'F://wmz/wmz.json'
-    flist_url = 'F://wmz/article_url1.txt'
-    fcontent = "F://wmz/article_info.txt"
+    flist_url = 'F://wmz/article_url2.txt'
+    fcontent = "F://wmz/article_info_test.txt"
     # 获取文秘站所有导航的页码链接
     # get_nav_addr(lst, web_url)
     # 获取文秘站的所有文章链接

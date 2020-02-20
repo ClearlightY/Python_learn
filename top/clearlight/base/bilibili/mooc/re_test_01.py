@@ -69,3 +69,12 @@ print(word_pattern.findall('These are some phone numbers 915-555-1234...hello'))
 print(word_pattern2.findall('These are some phone numbers 915-555-1234...hello'))
 
 num = re.compile(r'\(?\d{3}[-.)]\d{3}[-.]\d{4}')
+
+url = re.search(r'http://www.cnwmz.com/html/\d+/\d+', '"http://www.cnwmz.com/html/21201608/46283.html"')
+print(url.group(0))
+
+for j in range(20):
+    print(j)
+
+match = re.match(r'{pe.begin.pagination}.*{pe.end.pagination}', '{pe.begin.pagination}上一页 <b><a href="/html/21201701/869436.html">1</a></b>1 2 3 下一页{pe.end.pagination}')
+print(match.group(0))
