@@ -11,7 +11,7 @@ def get_html_text(url):
         headers = {
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36',
         }
-        r = requests.get(url, headers=headers)
+        r = requests.get(url, headers=headers, timeout=60)
         r.raise_for_status()
         r.encoding = 'utf-8'
         return r.text
@@ -213,7 +213,7 @@ def main():
     web_url = 'http://www.cnwmz.com'
     lst = []
     fpath = 'F://wmz/wmz.json'
-    flist_url = 'F://wmz/500025000_60000120000.txt'
+    flist_url = 'F://wmz/500025000_60000120000_72493.txt'
     fname = re.search(r'\d+_\d+', flist_url)
     fcontent = "F://wmz/article_info_" + str(fname.group(0)) + ".txt"
     # 获取文秘站所有导航的页码链接
