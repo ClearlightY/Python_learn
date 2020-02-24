@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flask</title>
+</head>
+<body>
+<form action="/login" method="post">
+    Username: <input type="text" name="uname"/><br/>
+    Password: <input type="text" name="password"/><br/>
+    <input type="submit" value="登录"/>
+</form>
+<h1>
+    {{msg}}
+
+    {%set sex = '男'%}
+    {{sex}}
+
+    {%set sexs = ["男, 女, 保密"]%}
+    {% for s in sexs %}
+    {{ s }}
+    {% endfor %}
+
+
+    {%set name = 'peter' %}
+    {% if name %}
+    <h1>Hello {{ name }}!</h1>
+    {% else %}
+    <h1>Hello World!</h1>
+    {% endif %}
+</h1>
+</body>
+</html>
