@@ -203,11 +203,11 @@ def main():
     flist_url = 'F://wmz/article_url1.txt'
     fcontent = "F://wmz/article_info.txt"
     # 获取文秘站所有导航的页码链接
-    # get_nav_addr(lst, web_url)
+    get_nav_addr(lst, web_url)
     # 获取文秘站的所有文章链接
-    # get_article_url(lst, web_url, flist_url)
+    get_article_url(lst, web_url, flist_url)
     # 获取想要的内容
-    get_news_content(lst, web_url, flist_url, fcontent)
+    # get_news_content(lst, web_url, flist_url, fcontent)
 
 
 if __name__ == '__main__':
