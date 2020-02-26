@@ -19,7 +19,7 @@ def get_html_text(url):
 
 
 def get_topic_addr(lst, news_web_url):
-    index = ['', '_1', '_2']
+    index = ['', '_1', '_2', '_3']
     count = 0
     for i in index:
         url = news_web_url + 'index' + str(i) + '.html'
@@ -68,33 +68,36 @@ def get_news_content(lst, news_web_url, fpath):
 
             # 返回bodyTxt下的所有内容
             article_text = soup.find('div', attrs={'class': 'bodyTxt'})
-            # 查看文本中是否含有发文字号, 若含有, 则以列表的形式将文本进行划分
-            issue_txt = article_text.find_all(string=re.compile(r'[ \u3000\t]*(.{1,5}[指发办电]? ?〔\d{4}〕 ?第?\d{1,3}号)'))
-            # print(len(issue_txt))
-
-            # 若文本含有文号, 则列表长度不为0
-            if len(issue_txt) != 0:
-                # 遍历列表
-                for i in issue_txt:
-                    # 返回符合re符合的字符串
-                    issue = re.search(r'[ \u3000\t]*(.{1,5}[指发办电]? ?〔\d{4}〕 ?第?\d{1,3}号)', i)
-                    # 若是不为空, 则将返回结果存到字典中
-                    if issue:
-                        article_info['issue'] = issue.group(0)
-                        # 以最近的文号为准, 有漏洞(若是文章中含有文号, 却不是本文的, 则获取错误, 需要修改)
-                        break
 
             # 获取文章内容
-            content_list = []
             article_content = soup.find('div', attrs={'class': 'article'})
             content = article_content.find_all('p')
             # print(content)
-            for p in content:
-                # print(p)
-                # print(type(p))
-                # print(type(p.string))
-                if p.string is not None:
-                    content_list.append(str(p.string) + '\n')
+
+            content_list = []
+            for num, desc in enumerate(article_content.descendants):
+                dc = str(desc)
+                tag = re.search(r'(<.+>.*</.+>|<.+/>|<.+>|</.+>)', dc)
+                if tag:
+                    # print('-----------------')
+                    # print(tag.group(0))
+                    # content_list.append('\n')
+                    continue
+                # if str(desc.name) == 'p' or str(desc.name) == 'strong' or str(desc.name) == ' str(desc.name) == 'br' or str(desc.name) == 'div' or str(desc.name) == 'img' or str(desc.name) == 'a' or str(desc.name) == 'center' or str(desc.name) == 'span':
+                #
+                #     continue
+                if dc == ' ' or dc == '点击下载：':
+                    continue
+                file = re.search(r'.+\.(doc|ppt|excl|zip)', dc)
+                if file:
+                    # print('****************')
+                    # print(file.group(0))
+                    if dc == file.group(0):
+                        continue
+                content_list.append(dc + '\n')
+                print(dc)
+                if num == 3:
+                    break
 
             article_info['content'] = content_list
             # 将每条信息写到文件中
@@ -107,7 +110,7 @@ def get_news_content(lst, news_web_url, fpath):
 def main():
     new_web_url = 'http://wjw.beijing.gov.cn/wjwh/ztzl/xxgzbd/gzbdzcfg/'
     lst = []
-    fpath = 'F://beijing.txt'
+    fpath = 'F://practice/policy/beijing.txt'
     get_topic_addr(lst, new_web_url)
     get_news_content(lst, new_web_url, fpath)
 
