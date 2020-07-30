@@ -1,7 +1,7 @@
 import codecs as cs
 import os
 
-fr = open('test.txt', encoding='gbk')
+fr = open('test.txt', encoding='utf-8', errors='ignore')
 all_utf8 = fr.read()
 # all_utf8.decode('utf-8')
 print(all_utf8)
